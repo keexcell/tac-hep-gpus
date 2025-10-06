@@ -16,6 +16,7 @@
 
 
 
+
 //------------------------------------------------------------------------------
 // Particle Class
 //
@@ -23,12 +24,27 @@ class Particle{
 
 	public:
 	Particle();
-	// FIXME : Create an additional constructor that takes 4 arguments --> the 4-momentum
 	double   pt, eta, phi, E, m, p[4];
 	void     p4(double, double, double, double);
 	void     print();
 	void     setMass(double);
 	double   sintheta();
+	
+	Particle(double pt, double eta, double phi, double E);
+};
+
+class Lepton : public Particle{
+	public:
+    	Lepton();
+        int charge = 0;
+	void setCharge(int);
+};
+
+class Jet : public Particle{
+   	public:
+        Jet();
+	int h_flavor = 0;
+	void setFlavor(int);
 };
 
 //------------------------------------------------------------------------------
@@ -48,27 +64,59 @@ Particle::Particle(){
 }
 
 //*** Additional constructor ------------------------------------------------------
-Particle::Particle( ){ 
-	//FIXME
+Particle::Particle(double E, double px, double py, double pz){ 
+	pt = eta = phi = E = m = 0.0;
+	p[0]=E;
+	p[1]=px;
+	p[2]=py;
+	p[3]=pz;
+}
+
+Lepton::Lepton(){
+        pt = eta = phi = E = m = 0.0;
+        p[0] = p[1] = p[2] = p[3] = 0.0;
+	charge = 0;
+}
+
+Jet::Jet(){
+        pt = eta = phi = E = m = 0.0;
+        p[0] = p[1] = p[2] = p[3] = 0.0;
+	h_flavor = 0;
 }
 
 //
 //*** Members  ------------------------------------------------------
 //
 double Particle::sintheta(){
-
-	//FIXME
+	/* got this formula from a combination of pseudorapidity’s wiki and 
+https://dspace.mit.edu/bitstream/handle/1721.1/92036/Aad-2012-Measurement%20of%2
+0the%20p.pdf?sequence=1 
+where pT = |p|sin(theta) = |p|/cosh(eta) */
+	return 1.0 / cosh(eta);
 }
 
 void Particle::p4(double pT, double eta, double phi, double energy){
-
 	//FIXME
-
+    this-> pt = pT;
+    this-> eta = eta;
+    this-> phi = phi;
+    this-> E = energy; 
+	double p, px, py, pz;
+	p = pt / sintheta();
+	px = pt * cos(phi);
+	py = pt * sin(phi);
+	pz = std::sqrt((pt*pt) - (p*p));
+	
+	this-> p[0] = E;
+	this-> p[1] = px;
+	this-> p[2] = py;
+	this-> p[3] = pz;
+    
 }
 
 void Particle::setMass(double mass)
 {
-	// FIXME
+	this->m = mass;
 }
 
 //
@@ -77,7 +125,16 @@ void Particle::setMass(double mass)
 void Particle::print(){
 	std::cout << std::endl;
 	std::cout << "(" << p[0] <<",\t" << p[1] <<",\t"<< p[2] <<",\t"<< p[3] << ")" << "  " <<  sintheta() << std::endl;
-}
+};
+
+void Lepton::setCharge(int charge){
+    this->charge = charge;
+};
+
+void Jet::setFlavor(int h_flavor){
+    this->h_flavor = h_flavor;
+};
+
 
 int main() {
 	
@@ -108,9 +165,21 @@ int main() {
 	for (Long64_t jentry=0; jentry<100;jentry++)
  	{
 		t1->GetEntry(jentry);
-		std::cout<<" Event "<< jentry <<std::endl;	
-
-		//FIX ME
+		std::cout<<" Event "<< jentry <<std::endl;
+       	
+        for (Long64_t jet_n=0; jet_n<njets;jet_n++)
+        {
+            //number of jets in this event = jet_n
+            if (jet_n < 2){
+                Lepton lept;
+                lept.p4(lepPt[jet_n], lepEta[jet_n], lepPhi[jet_n], lepE[jet_n]);
+                lept.print();
+	    }else{
+                Jet jet;
+                jet.p4(jetPt, jetEta, jetPhi, jetE);
+                jet.print();
+	}
+       	}
 
 
 	} // Loop over all events
