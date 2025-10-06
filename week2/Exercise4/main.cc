@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "t1.h"
+#include "hh/t1.h"
 
 #include <TMath.h>
 #include <TFile.h>
@@ -38,6 +38,7 @@ class Lepton : public Particle{
     	Lepton();
         int charge = 0;
 	void setCharge(int);
+	void print();
 };
 
 class Jet : public Particle{
@@ -45,6 +46,7 @@ class Jet : public Particle{
         Jet();
 	int h_flavor = 0;
 	void setFlavor(int);
+	void print();
 };
 
 //------------------------------------------------------------------------------
@@ -92,31 +94,24 @@ double Particle::sintheta(){
 https://dspace.mit.edu/bitstream/handle/1721.1/92036/Aad-2012-Measurement%20of%2
 0the%20p.pdf?sequence=1 
 where pT = |p|sin(theta) = |p|/cosh(eta) */
-	return 1.0 / cosh(eta);
+	return 1.0 / std::cosh(eta);
 }
 
 void Particle::p4(double pT, double eta, double phi, double energy){
-	//FIXME
-    this-> pt = pT;
-    this-> eta = eta;
-    this-> phi = phi;
-    this-> E = energy; 
-	double p, px, py, pz;
-	p = pt / sintheta();
-	px = pt * cos(phi);
-	py = pt * sin(phi);
-	pz = std::sqrt((pt*pt) - (p*p));
-	
-	this-> p[0] = E;
-	this-> p[1] = px;
-	this-> p[2] = py;
-	this-> p[3] = pz;
+    	pt = pT;
+	eta = eta;
+    	phi = phi;
+    	E = energy; 
+	p[0] = E;
+	p[1] = pt * std::cos(phi);;
+	p[2] = pt * std::sin(phi);
+	p[3] = pt * std::sinh((eta));
     
 }
 
 void Particle::setMass(double mass)
 {
-	this->m = mass;
+	m = mass;
 }
 
 //
@@ -125,15 +120,26 @@ void Particle::setMass(double mass)
 void Particle::print(){
 	std::cout << std::endl;
 	std::cout << "(" << p[0] <<",\t" << p[1] <<",\t"<< p[2] <<",\t"<< p[3] << ")" << "  " <<  sintheta() << std::endl;
-};
+}
 
-void Lepton::setCharge(int charge){
-    this->charge = charge;
-};
+void Lepton::print(){
+        std::cout << std::endl;
+        std::cout << "(" << p[0] <<",\t" << p[1] <<",\t"<< p[2] <<",\t"<< p[3] << ")" << "  " <<  sintheta() << std::endl;
+	std::cout << "Charge = " << charge << std::endl;
+}
+
+void Jet::print(){
+        std::cout << std::endl;
+        std::cout << "(" << p[0] <<",\t" << p[1] <<",\t"<< p[2] <<",\t"<< p[3] << ")" << "  " <<  sintheta() << std::endl;
+	std::cout << "Hadron Flavor = " << h_flavor << std::endl;
+}
+void Lepton::setCharge(int chrge){
+	charge = chrge;
+}
 
-void Jet::setFlavor(int h_flavor){
-    this->h_flavor = h_flavor;
-};
+void Jet::setFlavor(int h_flav){
+    	h_flavor = h_flav;
+}
 
 
 int main() {
@@ -146,6 +152,7 @@ int main() {
 	TTree *t1 = (TTree*)(f->Get("t1"));
 
 	// Read the variables from the ROOT tree branches
+	t1->SetBranchAddress("nleps",&nleps);
 	t1->SetBranchAddress("lepPt",&lepPt);
 	t1->SetBranchAddress("lepEta",&lepEta);
 	t1->SetBranchAddress("lepPhi",&lepPhi);
@@ -162,24 +169,26 @@ int main() {
 	// Total number of events in ROOT tree
 	Long64_t nentries = t1->GetEntries();
 
-	for (Long64_t jentry=0; jentry<100;jentry++)
+	for (Long64_t jentry=0; jentry<10;jentry++)
  	{
 		t1->GetEntry(jentry);
 		std::cout<<" Event "<< jentry <<std::endl;
        	
-        for (Long64_t jet_n=0; jet_n<njets;jet_n++)
-        {
-            //number of jets in this event = jet_n
-            if (jet_n < 2){
-                Lepton lept;
-                lept.p4(lepPt[jet_n], lepEta[jet_n], lepPhi[jet_n], lepE[jet_n]);
-                lept.print();
-	    }else{
-                Jet jet;
-                jet.p4(jetPt, jetEta, jetPhi, jetE);
-                jet.print();
-	}
-       	}
+        	for (int l_i = 0; l_i < nleps; ++l_i){
+			Lepton lep_var = Lepton();
+			lep_var.p4(lepPt[l_i], lepEta[l_i], lepPhi[l_i], lepE[l_i]);
+			lep_var.setCharge(lepQ[l_i]);
+			lep_var.print();
+		} //loop over lepton events
+		for (int j_i = 0; j_i < njets; ++j_i){
+			Jet jet_var = Jet();
+			jet_var.p4(jetPt[j_i], jetEta[j_i], jetPhi[j_i], jetE[j_i]);
+			jet_var.setFlavor(jetHadronFlavour[j_i]);
+			jet_var.print();
+		} //loop over jet events
+	
+	
+       	
 
 
 	} // Loop over all events
