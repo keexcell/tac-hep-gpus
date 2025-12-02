@@ -4,11 +4,11 @@
 
 ## C++ and CPU profiling 
 - Start by writing a code in C++ that :
-  * Creates two 2-dimensional square matrices A and B of size DSIZE >= 512 and fill them in with arbitrary integer values.
-  * Performs a 2-d stencil operation on each matrix. You can use any radius size, but keep it > 2.
-  * Performs a matrix multiplication of the matrices after the stencil application
-  * Make sure that you also add utility functions to check your results. 
-- Profile your C++ code using the VTune profiler and identify the compute intensive parts.
+  - Creates two 2-dimensional square matrices A and B of size DSIZE >= 512 and fill them in with arbitrary integer values.
+  - Performs a 2-d stencil operation on each matrix. You can use any radius size, but keep it > 2.
+  - Performs a matrix multiplication of the matrices after the stencil application
+  - Make sure that you also add utility functions to check your results. 
+- *Profile your C++ code using the VTune profiler and identify the compute intensive parts.*
 
 **Compile this portion with `g++ project.cpp -o project_cpp`. Run with `./project_cpp`**
 
