@@ -10,6 +10,8 @@
   - Make sure that you also add utility functions to check your results. 
 - Profile your C++ code using the VTune profiler and identify the compute intensive parts.
 
+**Compile this portion with `g++ project.cpp -o project_cpp`. Run with `./project_cpp`**
+
 ## Porting to CUDA
 - Write the same application in CUDA: 
   - You should write a CUDA kernel that performs the stencil operation and one for the matrix multiplication.
