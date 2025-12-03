@@ -1,0 +1,19 @@
+C++ and CPU profiling
+1. ssh into HEP clusters
+2. compile C++ file with `g++ project.cpp -o project_cpp`, run file with `./project_cpp`
+3. VTune profiler....
+**coming soon**
+
+Porting to CUDA
+1. from HEP cluster `ssh g38nXX` onto the GPUs
+2. compile: `nvcc project.cu -o project_cuda`, run: `./project_cuda`
+**note: checkers are finding incorrect values**
+
+To do:
+- vtune profiler
+- fix cuda code
+- profile with nsys
+- make new file and switch to managed memory
+- optimize by "making use of non-default CUDA streams and shared memory"
+- compare optimized with initial CUDA implementation
+- use alpaka (hopeless case)
