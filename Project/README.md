@@ -8,9 +8,7 @@
   - Performs a 2-d stencil operation on each matrix. You can use any radius size, but keep it > 2.
   - Performs a matrix multiplication of the matrices after the stencil application
   - Make sure that you also add utility functions to check your results. 
-- *Profile your C++ code using the VTune profiler and identify the compute intensive parts.*
-
-**Compile this portion with `g++ project.cpp -o project_cpp`. Run with `./project_cpp`**
+- Profile your C++ code using the VTune profiler and identify the compute intensive parts.
 
 ## Porting to CUDA
 - Write the same application in CUDA: 
