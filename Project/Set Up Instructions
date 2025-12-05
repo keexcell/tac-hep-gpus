@@ -7,7 +7,8 @@ C++ and CPU profiling
 Porting to CUDA
 1. from HEP cluster `ssh g38nXX` onto the GPUs
 2. compile: `nvcc project_pt2.cu -o project_cuda`, run: `./project_cuda`
-**note: checkers are finding incorrect values**
+3. Ran nsys profiler with `nsys profile --stats=true ./project_cuda`
+    Wasn't able to open the GUI, but at least sent the report to report_text.txt with `nsys stats report1.nsys-rep > report_text.txt`
 
 To do:
 - vtune profiler
