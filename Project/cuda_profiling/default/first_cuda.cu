@@ -215,10 +215,12 @@ int main(void) {
 	free(h_B);
 	free(h_Astenc);
 	free(h_Bstenc);
+	free(h_C);
 	cudaFree(d_A);
 	cudaFree(d_B);
 	cudaFree(d_Astenc);
 	cudaFree(d_Bstenc);
+	cudaFree(d_C);
 	printf("Success!\n");
 
 	return 0;
