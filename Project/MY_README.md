@@ -10,15 +10,20 @@
 
 ### Porting to CUDA
 - From HEP cluster, `ssh g38nXX` onto the GPUs
-- Compiled: `nvcc project_pt2.cu -o project_cuda`, ran: `./project_cuda`
-- Ran nsys profiler with `nsys profile --stats=true ./project_cuda`
-    - Wasn't able to open the GUI, but at least sent the report to cuda_report.txt with `nsys stats report1.nsys-rep > cuda_report.txt`
+- Compiled: `nvcc first_cuda.cu -o first_cuda`, ran: `./first_cuda`
+- Ran nsys profiler with `nsys profile --stats=true ./first_cuda`
+    - Wasn't able to open the GUI, but at least sent the report to first_cuda_report.txt with `nsys stats report1.nsys-rep > first_cuda_report.txt`
     - *document/comment on the time spent in each CUDA API call. Also, make note on the time spent on host and device.*
-- Switch to managed memory. Compiled and ran with `nvcc project_managed.cu -o managed_cuda` and `./managed_cuda`
-    - *run nsys, document/comment on improvements*
+- Switch to managed memory. Compiled and ran with `nvcc managed_cuda.cu -o managed_cuda` and `./managed_cuda`
+- Ran nsys profiler with `nsys profile --stats=true ./managed_cuda`, sent the report to managed_cuda_report.txt with `nsys stats report3.nsys-rep > managed_cuda_report.txt`
+    - *document/comment on improvements*
 
 ### Optimizing performance in CUDA
-- *Optimize the performance of your code making use of non-default CUDA streams and shared memory.*
-- *Once you have decided on the best approach, profile your application and compare the time spent in each API call and the overall timing of your application with your initial CUDA implementation.*
+- Compiled and ran with `nvcc stream-share_cuda.cu -o stream-share_cuda` and `./stream-share_cuda`
+- Ran nsys profiler with `nsys profile --stats=true ./stream-share_cuda` and sent the report to cuda_report.txt with `nsys stats report4.nsys-rep > ss_cuda_report.txt`
+    - *compare the time spent in each API call and the overall timing of your application with your initial CUDA implementation.*
 
 ### Alpaka
+- *Re-write your application making use of the Alpaka portability library.*
+- *Describe the steps you had to follow to re-write your code.*
+
