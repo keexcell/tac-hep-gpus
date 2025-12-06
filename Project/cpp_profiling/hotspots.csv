@@ -1,2 +1,0 @@
-Function	CPU Time	CPU Time:Effective Time	CPU Time:Spin Time	CPU Time:Overhead Time	Module	Function (Full)	Source File	Start Address
-matrix_mult	0.260000	0.260000	0.0	0.0	project_cpp2	matrix_mult(int const (*)[512], int const (*)[512], int (*)[512], int)	project_pt1.cpp	0x401460
