@@ -34,17 +34,17 @@
 - I had to make sure to write the file within the intro_to_alpaka/alpaka folder but I compiled with `nvcc -x cu --expt-relaxed-constexpr -std=c++20 -O2 -g -I${HOME}/public/alpaka/include -DALPAKA_ACC_GPU_CUDA_ENABLED my_alpaka_cuda.cu -o my_alpaka_cuda` and ran with `./my_alpaka_cuda`
 - To re-write code:
     - Following the syntax of 05_kernel.cc in intro_to_alpaka, the kernels had to be rewritten with
-  `struct stencil_2d {
-	template <typename TAcc, typename T>
-	ALPAKA_FN_ACC void operator()(TAcc const& acc,
-								  T const* __restrict__ in,
-								  T * __restrict__ out,
-								 )const{ 
-      ...
+  `struct stencil_2d {  
+	template <typename TAcc, typename T>  
+	ALPAKA_FN_ACC void operator()(TAcc const& acc,  
+								  T const* __restrict__ in,  
+								  T * __restrict__ out,  
+								 )const{  
+      ...  
       };`
-  at the beginning (and similar with matrix_mult) o make them alpaka functions. I was able to rewrite the shared memory variables and the threads/blocks in both kernels terms of alpaka variables (`alpaka::declareSharedVar<std::uint32_t, __COUNTER__>(acc);` and
-`auto globalThreadIdx = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
-auto blocksize = alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
+  at the beginning (and similar with matrix_mult) o make them alpaka functions. I was able to rewrite the shared memory variables and the threads/blocks in both kernels terms of alpaka variables (`alpaka::declareSharedVar<std::uint32_t, __COUNTER__>(acc);` and  
+`auto globalThreadIdx = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);  
+auto blocksize = alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);  
 auto blockId = alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc);`
     - Instead of streams, I did alpaka queues and the host and device copies made with `allocMappedBuf` and `memcpy`
 
