@@ -32,7 +32,7 @@
     3. `git clone https://github.com/fwyzard/intro_to_alpaka.git -b tachep2025
        cd intro_to_alpaka/alpaka/
        make`
-- I had to make sure to write the file within the intro_to_alpaka/alpaka folder but I compiled with `nvcc -x cu --expt-relaxed-constexpr -std=c++20 -O2 -g -I${HOME}/public/alpaka/include -DALPAKA_ACC_GPU_CUDA_ENABLED my_alpaka_cuda.cu -o my_alpaka_cuda` and ran with `./my_alpaka_cuda`
+- I had to make sure to write the file within the intro_to_alpaka/alpaka folder but I compiled with `nvcc -x cu --expt-relaxed-constexpr -std=c++20 -O2 -g -I${HOME}/public/alpaka/include -DALPAKA_ACC_GPU_CUDA_ENABLED my_alpaka_cuda.cu -o my_alpaka_cuda` 
 - To re-write code:
     - Following the syntax of 05_kernel.cc in intro_to_alpaka, the kernels had to be rewritten with:
       ```
