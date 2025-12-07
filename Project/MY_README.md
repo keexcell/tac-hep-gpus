@@ -24,6 +24,30 @@
     - *compare the time spent in each API call and the overall timing of your application with your initial CUDA implementation.*
 
 ### Alpaka
-- *Re-write your application making use of the Alpaka portability library.*
-- *Describe the steps you had to follow to re-write your code.*
+- To set up I git cloned the repos given in lecture:
+    1. `git clone https://github.com/alpaka-group/alpaka.git -b 2.0.0 ${HOME}/public/alpaka`
+    2. `git clone https://github.com/kokkos/mdspan.git ${HOME}/public/mdspan
+       git -C ${HOME}/public/mdspan checkout 973ef6415a6396e5f0a55cb4c99afd1d1d541681`
+    3. `git clone https://github.com/fwyzard/intro_to_alpaka.git -b tachep2025
+       cd intro_to_alpaka/alpaka/
+       make`
+- I had to make sure to write the file within the intro_to_alpaka/alpaka folder but I compiled with `nvcc -x cu --expt-relaxed-constexpr -std=c++20 -O2 -g -I${HOME}/public/alpaka/include -DALPAKA_ACC_GPU_CUDA_ENABLED my_alpaka_cuda.cu -o my_alpaka_cuda` and ran with `./my_alpaka_cuda`
+- To re-write code:
+    - Following the syntax of 05_kernel.cc in intro_to_alpaka, the kernels had to be rewritten with
+  `struct stencil_2d {
+	template <typename TAcc, typename T>
+	ALPAKA_FN_ACC void operator()(TAcc const& acc,
+								  T const* __restrict__ in,
+								  T * __restrict__ out,
+								 )const{ 
+      ...
+      };`
+  at the beginning (and similar with matrix_mult) o make them alpaka functions. I was able to rewrite the shared memory variables and the threads/blocks in both kernels terms of alpaka variables (`alpaka::declareSharedVar<std::uint32_t, __COUNTER__>(acc);` and
+`auto globalThreadIdx = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
+auto blocksize = alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
+auto blockId = alpaka::getWorkDiv<alpaka::Grid, alpaka::Blocks>(acc);`
+    - Instead of streams, I did alpaka queues and the host and device copies made with `allocMappedBuf` and `memcpy`
+
+
+
 
